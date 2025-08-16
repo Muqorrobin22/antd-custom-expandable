@@ -1,6 +1,7 @@
 "use client";
 
 import { Table, TableColumnsType } from "antd";
+import { JSX } from "react";
 
 interface DataType {
   key: React.Key;
@@ -62,6 +63,40 @@ const columns: TableColumnsType<DataType> = [
 ];
 
 export default function Home() {
+  const expandableUIRow: (record: DataType) => JSX.Element = (record) => {
+    return (
+      <section className="grid gap-8 p-2 grid-cols-2 max-w-[1000px]">
+        <div>
+          <p>
+            <span className="font-bold">Name: </span> {record.name}
+          </p>
+          <p>
+            <span className="font-bold">Age: </span> {record.age}
+          </p>
+          <p>
+            <span className="font-bold">Address: </span> {record.address}
+          </p>
+          <p>
+            <span className="font-bold">Description: </span>{" "}
+            {record.description}
+          </p>
+        </div>
+
+        <div>
+          <p>
+            <span className="font-bold">Occupation: </span> {record.occupation}
+          </p>
+          <p>
+            <span className="font-bold">Phone: </span> {record.phone_number}
+          </p>
+          <p>
+            <span className="font-bold">Status: </span> {record.status}
+          </p>
+        </div>
+      </section>
+    );
+  };
+
   return (
     <div className="flex items-center justify-center h-[100vh]">
       {/* Code here */}
@@ -70,9 +105,10 @@ export default function Home() {
         dataSource={data}
         pagination={false}
         expandable={{
-          expandedRowRender: (record) => (
-            <p style={{ margin: 0 }}>{record.description}</p>
-          ),
+          expandedRowRender: (record) => {
+            console.log("record: ", record);
+            return <div>{expandableUIRow(record)}</div>;
+          },
           expandIcon: ({ expanded, onExpand, record }) => {
             return expanded ? (
               <p onClick={(e) => onExpand(record, e)}>Hide</p>
