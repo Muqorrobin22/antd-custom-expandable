@@ -1,3 +1,5 @@
+"use client";
+
 import { Table, TableColumnsType } from "antd";
 
 interface DataType {
@@ -56,13 +58,30 @@ const columns: TableColumnsType<DataType> = [
   { title: "Age", dataIndex: "age", key: "age" },
   { title: "Address", dataIndex: "address", key: "address" },
   { title: "Descritpion", dataIndex: "description", key: "description" },
+  Table.EXPAND_COLUMN,
 ];
 
 export default function Home() {
   return (
     <div className="flex items-center justify-center h-[100vh]">
       {/* Code here */}
-      <Table<DataType> columns={columns} dataSource={data} pagination={false} />
+      <Table<DataType>
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        expandable={{
+          expandedRowRender: (record) => (
+            <p style={{ margin: 0 }}>{record.description}</p>
+          ),
+          expandIcon: ({ expanded, onExpand, record }) => {
+            return expanded ? (
+              <p onClick={(e) => onExpand(record, e)}>Hide</p>
+            ) : (
+              <p onClick={(e) => onExpand(record, e)}>Details</p>
+            );
+          },
+        }}
+      />
     </div>
   );
 }
