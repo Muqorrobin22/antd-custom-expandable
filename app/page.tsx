@@ -97,6 +97,17 @@ export default function Home() {
     );
   };
 
+  const columnsNewTable: TableColumnsType<DataType> = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    { title: "Age", dataIndex: "age", key: "age" },
+    { title: "Address", dataIndex: "address", key: "address" },
+    { title: "Descritpion", dataIndex: "description", key: "description" },
+  ];
+
   return (
     <div className="flex items-center justify-center h-[100vh]">
       {/* Code here */}
@@ -121,7 +132,13 @@ export default function Home() {
         />
 
         {/* Code here PART II */}
-        <div className="mt-6"></div>
+        <div className="mt-6">
+          <Table<DataType>
+            columns={columnsNewTable}
+            dataSource={data}
+            pagination={false}
+          />
+        </div>
       </div>
     </div>
   );
