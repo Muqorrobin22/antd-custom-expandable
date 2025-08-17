@@ -1,7 +1,7 @@
 "use client";
 
-import { Table, TableColumnsType } from "antd";
-import { JSX, useState } from "react";
+import { Skeleton, Table, TableColumnsType } from "antd";
+import { JSX, useCallback, useEffect, useState } from "react";
 
 interface DataType {
   key: React.Key;
@@ -111,6 +111,9 @@ const columns: TableColumnsType<DataType> = [
 
 export default function Home() {
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
+  const [isTriggerFetchDataFromAPI, setIsTriggerFetchDataFromAPI] =
+    useState<boolean>(false);
+  const [keyEachRow, setKeyEachRow] = useState<string>("");
 
   const handleExpand: ({
     expanded,
@@ -119,12 +122,45 @@ export default function Home() {
     record: DataTypeNew;
     expanded?: boolean;
   }) => void = ({ expanded, record }) => {
+    setKeyEachRow(record.key);
+
+    if (expandedRowKeys.includes(record.key)) {
+      setIsTriggerFetchDataFromAPI(false);
+    } else {
+      setIsTriggerFetchDataFromAPI(true);
+    }
+
     setExpandedRowKeys((prev) => {
       return prev.includes(record.key)
         ? prev.filter((key) => key !== record.key)
         : [...prev, record.key];
     });
   };
+
+  const [loadingEachRows, setLoadingEachRows] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const FetchAPI = useCallback(() => {
+    setLoadingEachRows((prev) => ({
+      ...prev,
+      [keyEachRow]: true,
+    }));
+
+    setTimeout(() => {
+      setLoadingEachRows((prev) => ({
+        ...prev,
+        [keyEachRow]: false,
+      }));
+    }, 3000);
+  }, [keyEachRow]);
+
+  useEffect(() => {
+    if (isTriggerFetchDataFromAPI) {
+      FetchAPI();
+      setIsTriggerFetchDataFromAPI(false);
+    }
+  }, [isTriggerFetchDataFromAPI, FetchAPI]);
 
   const expandableUIRow: (record: DataType) => JSX.Element = (record) => {
     return (
@@ -155,6 +191,98 @@ export default function Home() {
           <p>
             <span className="font-bold">Status: </span> {record.status}
           </p>
+        </div>
+      </section>
+    );
+  };
+
+  const expandableUIRowNew: (record: DataTypeNew) => JSX.Element = (record) => {
+    const isLoading = loadingEachRows[record.key] || false;
+
+    return (
+      <section className="grid gap-8 p-2 grid-cols-2 max-w-[1000px]">
+        <div>
+          <div>
+            <span className="font-bold">Name: </span>{" "}
+            {isLoading ? (
+              <Skeleton.Button
+                active
+                style={{ maxHeight: 20, minWidth: 100 }}
+              />
+            ) : (
+              record.name
+            )}
+          </div>
+
+          <div>
+            <span className="font-bold">Age: </span>{" "}
+            {isLoading ? (
+              <Skeleton.Button
+                active
+                style={{ maxHeight: 20, minWidth: 100 }}
+              />
+            ) : (
+              record.age
+            )}
+          </div>
+          <div>
+            <span className="font-bold">Address: </span>{" "}
+            {isLoading ? (
+              <Skeleton.Button
+                active
+                style={{ maxHeight: 20, minWidth: 200 }}
+              />
+            ) : (
+              record.address
+            )}
+          </div>
+          <div>
+            <span className="font-bold">Description: </span>{" "}
+            {isLoading ? (
+              <Skeleton.Button
+                active
+                style={{ maxHeight: 20, minWidth: 250 }}
+              />
+            ) : (
+              record.description
+            )}
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <span className="font-bold">Occupation: </span>{" "}
+            {isLoading ? (
+              <Skeleton.Button
+                active
+                style={{ maxHeight: 20, minWidth: 100 }}
+              />
+            ) : (
+              record.occupation
+            )}
+          </div>
+          <div>
+            <span className="font-bold">Phone: </span>{" "}
+            {isLoading ? (
+              <Skeleton.Button
+                active
+                style={{ maxHeight: 20, minWidth: 100 }}
+              />
+            ) : (
+              record.phone_number
+            )}
+          </div>
+          <div>
+            <span className="font-bold">Status: </span>{" "}
+            {isLoading ? (
+              <Skeleton.Button
+                active
+                style={{ maxHeight: 20, minWidth: 100 }}
+              />
+            ) : (
+              record.status
+            )}
+          </div>
         </div>
       </section>
     );
@@ -215,7 +343,7 @@ export default function Home() {
             pagination={false}
             expandable={{
               expandedRowRender: (record) => {
-                return <div>{expandableUIRow(record)}</div>;
+                return <div>{expandableUIRowNew(record)}</div>;
               },
               expandedRowKeys: expandedRowKeys,
               showExpandColumn: false,
