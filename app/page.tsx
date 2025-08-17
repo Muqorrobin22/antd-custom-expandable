@@ -121,7 +121,7 @@ export default function Home() {
   }: {
     record: DataTypeNew;
     expanded?: boolean;
-  }) => void = ({ expanded, record }) => {
+  }) => void = ({ record }) => {
     setKeyEachRow(record.key);
 
     if (expandedRowKeys.includes(record.key)) {
@@ -300,7 +300,7 @@ export default function Home() {
     {
       title: "Action",
       key: "action",
-      render(value, record, index) {
+      render(value, record) {
         return (
           <div
             className="flex items-center cursor-pointer "
@@ -317,6 +317,12 @@ export default function Home() {
     <div className="flex items-center justify-center h-[100vh]">
       {/* Code here */}
       <div>
+        <div className="my-4">
+          <h1 className="text-base font-normal">Part I</h1>
+          <p className="text-sm font-light">
+            *let Antd Components handle functionality
+          </p>
+        </div>
         <Table<DataType>
           columns={columns}
           dataSource={data}
@@ -337,6 +343,12 @@ export default function Home() {
 
         {/* Code here PART II */}
         <div className="mt-6">
+          <div className="my-4">
+            <h1 className="text-base font-normal">Part II</h1>
+            <p className="text-sm font-light">
+              *Control Over your expandable functionality
+            </p>
+          </div>
           <Table<DataTypeNew>
             columns={columnsNewTable}
             dataSource={datanew}
