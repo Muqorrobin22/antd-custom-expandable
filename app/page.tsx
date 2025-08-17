@@ -1,10 +1,21 @@
 "use client";
 
 import { Table, TableColumnsType } from "antd";
-import { JSX } from "react";
+import { JSX, useState } from "react";
 
 interface DataType {
   key: React.Key;
+  name: string;
+  age: number;
+  address: string;
+  description: string;
+  phone_number: string;
+  occupation: string;
+  status: "single" | "married";
+}
+
+interface DataTypeNew {
+  key: string;
   name: string;
   age: number;
   address: string;
@@ -50,6 +61,42 @@ const data: DataType[] = [
   },
 ];
 
+const datanew: DataTypeNew[] = [
+  {
+    key: "1",
+    name: "John Brown",
+    age: 32,
+    address: "New York No. 1 Lake Park",
+    description:
+      "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park. ",
+    occupation: "Software Engineer",
+    phone_number: "8888888888",
+    status: "married",
+  },
+  {
+    key: "2",
+    name: "John Smith",
+    age: 32,
+    address: "New York No. 1 Lake Park",
+    description:
+      "My name is John Smith, I am 27 years old, living in New York No. 1 Lake Park. ",
+    occupation: "Network Engineer",
+    phone_number: "99999999",
+    status: "single",
+  },
+  {
+    key: "3",
+    name: "Ahmed Alakhtar",
+    age: 32,
+    address: "New York No. 1 Lake Park",
+    description:
+      "My name is Ahmed Alakhtar, I am 29 years old, living in New York No. 1 Lake Park. ",
+    occupation: "AI engineer",
+    phone_number: "111111111",
+    status: "single",
+  },
+];
+
 const columns: TableColumnsType<DataType> = [
   {
     title: "Name",
@@ -63,6 +110,22 @@ const columns: TableColumnsType<DataType> = [
 ];
 
 export default function Home() {
+  const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
+
+  const handleExpand: ({
+    expanded,
+    record,
+  }: {
+    record: DataTypeNew;
+    expanded?: boolean;
+  }) => void = ({ expanded, record }) => {
+    setExpandedRowKeys((prev) => {
+      return prev.includes(record.key)
+        ? prev.filter((key) => key !== record.key)
+        : [...prev, record.key];
+    });
+  };
+
   const expandableUIRow: (record: DataType) => JSX.Element = (record) => {
     return (
       <section className="grid gap-8 p-2 grid-cols-2 max-w-[1000px]">
@@ -97,7 +160,7 @@ export default function Home() {
     );
   };
 
-  const columnsNewTable: TableColumnsType<DataType> = [
+  const columnsNewTable: TableColumnsType<DataTypeNew> = [
     {
       title: "Name",
       dataIndex: "name",
@@ -106,6 +169,20 @@ export default function Home() {
     { title: "Age", dataIndex: "age", key: "age" },
     { title: "Address", dataIndex: "address", key: "address" },
     { title: "Descritpion", dataIndex: "description", key: "description" },
+    {
+      title: "Action",
+      key: "action",
+      render(value, record, index) {
+        return (
+          <div
+            className="flex items-center cursor-pointer "
+            onClick={() => handleExpand({ record })}
+          >
+            <p> Details </p>
+          </div>
+        );
+      },
+    },
   ];
 
   return (
@@ -118,7 +195,6 @@ export default function Home() {
           pagination={false}
           expandable={{
             expandedRowRender: (record) => {
-              console.log("record: ", record);
               return <div>{expandableUIRow(record)}</div>;
             },
             expandIcon: ({ expanded, onExpand, record }) => {
@@ -133,10 +209,21 @@ export default function Home() {
 
         {/* Code here PART II */}
         <div className="mt-6">
-          <Table<DataType>
+          <Table<DataTypeNew>
             columns={columnsNewTable}
-            dataSource={data}
+            dataSource={datanew}
             pagination={false}
+            expandable={{
+              expandedRowRender: (record) => {
+                return <div>{expandableUIRow(record)}</div>;
+              },
+              expandedRowKeys: expandedRowKeys,
+              showExpandColumn: false,
+              onExpand: (expanded, record) => {
+                // code the logic in here
+                handleExpand({ expanded, record });
+              },
+            }}
           />
         </div>
       </div>
