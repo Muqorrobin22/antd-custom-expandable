@@ -100,24 +100,29 @@ export default function Home() {
   return (
     <div className="flex items-center justify-center h-[100vh]">
       {/* Code here */}
-      <Table<DataType>
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-        expandable={{
-          expandedRowRender: (record) => {
-            console.log("record: ", record);
-            return <div>{expandableUIRow(record)}</div>;
-          },
-          expandIcon: ({ expanded, onExpand, record }) => {
-            return expanded ? (
-              <p onClick={(e) => onExpand(record, e)}>Hide</p>
-            ) : (
-              <p onClick={(e) => onExpand(record, e)}>Details</p>
-            );
-          },
-        }}
-      />
+      <div>
+        <Table<DataType>
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          expandable={{
+            expandedRowRender: (record) => {
+              console.log("record: ", record);
+              return <div>{expandableUIRow(record)}</div>;
+            },
+            expandIcon: ({ expanded, onExpand, record }) => {
+              return expanded ? (
+                <p onClick={(e) => onExpand(record, e)}>Hide</p>
+              ) : (
+                <p onClick={(e) => onExpand(record, e)}>Details</p>
+              );
+            },
+          }}
+        />
+
+        {/* Code here PART II */}
+        <div className="mt-6"></div>
+      </div>
     </div>
   );
 }
