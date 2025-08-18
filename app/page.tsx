@@ -317,54 +317,60 @@ export default function Home() {
     <div className="flex items-center justify-center h-[100vh]">
       {/* Code here */}
       <div>
-        <div className="my-4">
-          <h1 className="text-base font-normal">Part I</h1>
-          <p className="text-sm font-light">
-            *let Antd Components handle functionality
-          </p>
-        </div>
-        <Table<DataType>
-          columns={columns}
-          dataSource={data}
-          pagination={false}
-          expandable={{
-            expandedRowRender: (record) => {
-              return <div>{expandableUIRow(record)}</div>;
-            },
-            expandIcon: ({ expanded, onExpand, record }) => {
-              return expanded ? (
-                <p onClick={(e) => onExpand(record, e)}>Hide</p>
-              ) : (
-                <p onClick={(e) => onExpand(record, e)}>Details</p>
-              );
-            },
-          }}
-        />
+        <h1 className="text-2xl font-bold text-center mb-4">
+          Maneuver Series 1 - Expandable Table{" "}
+        </h1>
 
-        {/* Code here PART II */}
-        <div className="mt-6">
+        <div className="max-h-[700px] overflow-scroll mt-4 py-8">
           <div className="my-4">
-            <h1 className="text-base font-normal">Part II</h1>
+            <h1 className="text-base font-normal">Part I</h1>
             <p className="text-sm font-light">
-              *Control Over your expandable functionality
+              *let Antd Components handle functionality
             </p>
           </div>
-          <Table<DataTypeNew>
-            columns={columnsNewTable}
-            dataSource={datanew}
+          <Table<DataType>
+            columns={columns}
+            dataSource={data}
             pagination={false}
             expandable={{
               expandedRowRender: (record) => {
-                return <div>{expandableUIRowNew(record)}</div>;
+                return <div>{expandableUIRow(record)}</div>;
               },
-              expandedRowKeys: expandedRowKeys,
-              showExpandColumn: false,
-              onExpand: (expanded, record) => {
-                // code the logic in here
-                handleExpand({ expanded, record });
+              expandIcon: ({ expanded, onExpand, record }) => {
+                return expanded ? (
+                  <p onClick={(e) => onExpand(record, e)}>Hide</p>
+                ) : (
+                  <p onClick={(e) => onExpand(record, e)}>Details</p>
+                );
               },
             }}
           />
+
+          {/* Code here PART II */}
+          <div className="mt-6">
+            <div className="my-4">
+              <h1 className="text-base font-normal">Part II</h1>
+              <p className="text-sm font-light">
+                *Control Over your expandable functionality
+              </p>
+            </div>
+            <Table<DataTypeNew>
+              columns={columnsNewTable}
+              dataSource={datanew}
+              pagination={false}
+              expandable={{
+                expandedRowRender: (record) => {
+                  return <div>{expandableUIRowNew(record)}</div>;
+                },
+                expandedRowKeys: expandedRowKeys,
+                showExpandColumn: false,
+                onExpand: (expanded, record) => {
+                  // code the logic in here
+                  handleExpand({ expanded, record });
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
